@@ -1,0 +1,17 @@
+2011/08/14
+研究室のPC で 使う場合、最初に proxy を設定する
+$ git config --global http.proxy http://proxy.XXXX.jp:8080
+
+2011/09/11
+リモートリポジトリを持ってくる:
+$ git clone git://github.com/i03nomura1y/Sample.git
+編集して commit、変更をリモートに反映させる:
+$ push git@github.com:i03nomura1y/Sample.git
+リモートの更新をローカルに反映:
+$ git pull
+もしくは $ git pull git://github.com/i03nomura1y/Sample.git
+
+2011/02/06
+GitHub のテスト。
+git@github.com:i03nomura1y/Sample.git
+
