@@ -1,10 +1,11 @@
-﻿テスト用 Repogitory
+﻿サンプルコード用 Repository
 
-Message B
 
-Message from Circlet
+--
+2011/10/30
+サンプルコード用として使う。
 
-2011/08/14
+2011/09/14
 研究室のPC で 使う場合、最初に proxy を設定する
 $ git config --global http.proxy http://proxy.XXXX.jp:8080
 
