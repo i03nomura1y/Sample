@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <message>Hello</message>
+  <fruit> <name lang="en">Apple</name> <name lang="ja">りんご</name> </fruit>
+  <message>Bye</message>
+</root>
