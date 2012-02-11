@@ -1,5 +1,5 @@
 // created date : 2011/10/15 22:03:33
-// last updated : 2011/10/30 22:34:45
+// last updated : 2011/12/13 22:34:49
 // 
 // AES128 CBC PKCS7
 // Windows, WinCrypt
@@ -43,6 +43,7 @@ int main(){
 
   HCRYPTPROV hProv;
   HCRYPTKEY hkey;
+  DWORD	mode = CRYPT_MODE_CBC;
   struct KeyBLOB{
 	BLOBHEADER hdr;
 	DWORD cbKeySize;
@@ -63,7 +64,7 @@ int main(){
   // Key,IV 作成
   if( !CryptImportKey(hProv,(BYTE*)&kb, sizeof(kb),0,0,&hkey) )	return fprintf(stderr,"error1\n");
   if( !CryptSetKeyParam(hkey, KP_IV, iv, 0) )					return fprintf(stderr,"error2\n");
-  if( !CryptSetKeyParam(hKey, KP_MODE, (BYTE*)&mode, 0) )		return fprintf(stderr,"error3\n");
+  if( !CryptSetKeyParam(hkey, KP_MODE, (BYTE*)&mode, 0) )		return fprintf(stderr,"error3\n");
   // 暗号化 or 復号化  3番目の引数: データに続きがあればfalse, データ最後のときtrue
   if(  enc && !CryptEncrypt(hkey, 0, true, 0, buf, &dwCount, BUF_LEN) ) return fprintf(stderr,"error4\n");
   if( !enc && !CryptDecrypt(hkey, 0, true, 0, buf, &dwCount) ) return fprintf(stderr,"error4\n");
