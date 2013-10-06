@@ -17,6 +17,8 @@ myns.BaseObject.prototype = {
     // abstract な関数
     dump : 0
 };
+// クラスプロパティ
+myns.BaseObject.value = 2;
 
 /// class Text extends BaseObject
 myns.Text = function(str,x,y){
@@ -29,6 +31,7 @@ myns.Text = function(str,x,y){
     this.string = str;
     this.setXY(x,y);
 };
+// 継承
 myns.Text.prototype = new myns.BaseObject();
 // オーバーライド
 myns.Text.prototype.dump = function(){
