@@ -85,6 +85,10 @@
                         $.each(this.items, function(i, item){
                             _content += formatEntry(item);
                         });
+                        // 金額を下に追加する
+                        var arr = [this.date, "(合計金額)", "-", "-", this.price];
+                        _content += arr.join('\t') + "\n";
+                        
                     });
                     _total += yen;
                 });
