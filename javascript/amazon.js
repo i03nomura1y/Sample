@@ -13,7 +13,8 @@
         var month = RegExp.$2; if (month.length <= 1) month = "0" + month;
         var day = RegExp.$3; if (day.length <= 1) day = "0" + day;
         var date = "" + year + "/" + month + "/" + day;
-        var arr = [date, entry.name, entry.price, entry.url];
+        // var arr = [date, entry.name, entry.price, entry.url];
+        var arr = [date, entry.name, entry.url];
         return arr.join('\t') + "\n";
     }
     function popup(content) {
@@ -83,6 +84,9 @@
                         $.each(this.items, function (i, item) {
                             _content += formatEntry(item);
                         });
+                        // 金額を下に追加する
+                        var arr = [this.date, "(合計金額)", "-", this.price];
+                        _content += arr.join('\t') + "\n";
                     });
                     _total += yen;
                 });
