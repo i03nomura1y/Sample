@@ -7,14 +7,13 @@
     // 各注文履歴をTSVフォーマットにして返す
     var datePattern = new RegExp("(\\d{4})年(\\d{1,2})月(\\d{1,2})日");
     function formatEntry(entry) {
-        console.log(entry);
+        // console.log(entry);
         entry.date.match(datePattern);
         var year = RegExp.$1;
         var month = RegExp.$2; if (month.length <= 1) month = "0" + month;
         var day = RegExp.$3; if (day.length <= 1) day = "0" + day;
         var date = "" + year + "/" + month + "/" + day;
-        // var arr = [date, entry.name, entry.price, entry.url];
-        var arr = [date, entry.name, entry.url];
+        var arr = [date, entry.name, entry.url, entry.price];
         return arr.join('\t') + "\n";
     }
     function popup(content) {
@@ -77,24 +76,35 @@
             } else {
                 var _total = 0;
                 var _content = "";
+                // ヘッダ行を追加
+                _content += ["date", "name", "url", "price"].join('\t') + "\n";
+                
                 jQuery.each(total, function (year, results) {
                     var yen = 0;
                     jQuery.each(results, function () {
                         yen += this.price;
+
+                        // this.price: この items の合計金額
+                        var price_rest = Number(this.price); // 個別表示できなかった金額
                         $.each(this.items, function (i, item) {
                             _content += formatEntry(item);
+                            price_rest -= Number(item.price);
                         });
-                        // 金額を下に追加する
-                        var arr = [this.date, "(合計金額)", "-", this.price];
-                        _content += arr.join('\t') + "\n";
+                        // 個別表示できなかった金額を下に追加する
+                        if (price_rest > 0) {
+                            _content += formatEntry({date:this.date,
+                                                     name:"(合計金額)",
+                                                     url:"-",
+                                                     price:price_rest});
+                        }
                     });
                     _total += yen;
                 });
                 // result
                 $('#___overlay').remove();
-                alert('合計 ' + _total + ' 円');
+                // alert('合計 ' + _total + ' 円');
                 popup(_content);
-                console.log('合計 ' + _total + ' 円');
+                // console.log('合計 ' + _total + ' 円');
             }
         });
     }
@@ -122,13 +132,21 @@
                     item['price'] = $(this).parent().parent().find("span.a-color-price").text().trim();
                     items.push(item);
                 });
+                
+                // 合計金額 -> price
                 var priceText = jQuery(box.find('div.order-info span.value')[1]).text();
                 var price = 0;
                 if (priceText.match(/[0-9]/g) != null) {
                     price = Number(priceText.match(/[0-9]/g).join(''));
                 }
-                if (verbose)
-                    console.log(item, price);
+                
+                // items が 1個だけのときは price をセットする (Kindleむけの対応)
+                if (items.length == 1) {
+                    items[0].price = price;
+                }
+                
+                if (verbose) console.log(item, price);
+                
                 results.push({ 'date': dateText, 'items': items, 'price': price });
             }
         });
@@ -158,8 +176,7 @@
         if (priceText.match(/[0-9]/g) != null) {
             price = Number(priceText.match(/[0-9]/g).join(''));
         }
-        if (verbose)
-            console.log(item, price);
+        if (verbose) console.log(item, price);
         results.push({ 'date': dateText, 'items': items, 'price': price });
     }
     function load(num, verbose) {
@@ -196,8 +213,7 @@
                      .fail(function () {
                          $('#___overlay').text(year.toString() + '年の集計中…  / ' + (num + 1) + 'ページ目（サブ 失敗）');
                          setTimeout(function () {
-                             if (verbose)
-                                 console.log("fail");
+                             if (verbose) console.log("fail");
                          }, 500);
                      });
             } else {
@@ -227,8 +243,7 @@
             }
         })
               .fail(function (jqXHR, msg) {
-                  if (verbose)
-                      console.log("fail", msg);
+                  if (verbose) console.log("fail", msg);
               });
         return df.promise();
     }
